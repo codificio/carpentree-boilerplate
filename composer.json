@@ -14,8 +14,8 @@
         "fideloper/proxy": "^4.0",
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1",
-        "codificio/carpentree-core": "~0.1.0",
-        "codificio/carpentree-blog": "~0.1.0"
+        "codificio/carpentree-core": ">=0.1.0",
+        "codificio/carpentree-blog": ">=0.1.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
