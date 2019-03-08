@@ -13,3 +13,4 @@ yarn-error.log
 /.vscode
 /.vagrant
 packages/
+/laradock
