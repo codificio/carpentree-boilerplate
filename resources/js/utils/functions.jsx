@@ -83,6 +83,8 @@ export function assignObjectPaths(objIn, objOut) {
         let obj = {};
         obj.id = node.id;
         obj.label = node.attributes.name;
+        obj.text = node.attributes.name;
+        obj.key = node.attributes.name + "/";
         obj.path = 0;
         if (node.relationships.parent == null) {
             objOut[k] = obj;
@@ -93,6 +95,7 @@ export function assignObjectPaths(objIn, objOut) {
                     if (typeof objOut[j].children === "undefined") {
                         objOut[j].children = [];
                     }
+                    obj.key = objOut[j].key + obj.key;
                     obj.path = j + ".children." + +Object.keys(objOut[j].children).length;
                     //console.log("Path", obj.path);
                     setValue(objOut, obj.path, obj);
@@ -103,6 +106,7 @@ export function assignObjectPaths(objIn, objOut) {
                                 if (typeof objOut[j].children[i].children === "undefined") {
                                     objOut[j].children[i].children = [];
                                 }
+                                obj.key = objOut[i].key + obj.key;
                                 obj.path = j + ".children." + i + ".children." + Object.keys(objOut[j].children[i].children).length;
                                 //console.log("Path", obj.path);
                                 setValue(objOut, obj.path, obj);
@@ -113,6 +117,7 @@ export function assignObjectPaths(objIn, objOut) {
                                             if (typeof objOut[j].children[i].children[s].children === "undefined") {
                                                 objOut[j].children[i].children[s].children = [];
                                             }
+                                            obj.key = objOut[s].key + obj.key;
                                             obj.path = j + ".children." + i + ".children." + s + ".children." + Object.keys(objOut[j].children[i].children[s].children).length;
                                             //console.log("Path", obj.path);
                                             setValue(objOut, obj.path, obj);
@@ -123,6 +128,7 @@ export function assignObjectPaths(objIn, objOut) {
                                                         if (typeof objOut[j].children[i].children[s].children[t].children === "undefined") {
                                                             objOut[j].children[i].children[s].children[t].children = [];
                                                         }
+                                                        obj.key = objOut[t].key + obj.key;
                                                         obj.path =
                                                             j +
                                                             ".children." +
@@ -147,6 +153,31 @@ export function assignObjectPaths(objIn, objOut) {
                     }
                 }
             });
+        }
+    });
+}
+
+export function assignCategoriesPaths(objIn, objOut) {
+    if (objIn == undefined) {
+        return [];
+    }
+    Object.keys(objIn).forEach(i => {
+        const node = objIn[i];
+        let obj = {};
+        obj.id = node.id;
+        obj.size = 0;
+        obj.modified = "";
+        obj.key = node.attributes.name + "/";
+        if (node.relationships.parent == null) {
+            objOut.push(obj);
+        } else {
+            const father = node.relationships.parent.data.attributes.name + "/";
+            Object.keys(objOut).forEach(j => {
+                if (objOut[j].key.slice(-1 * father.length) === father) {
+                    obj.key = objOut[j].key + obj.key;
+                }
+            });
+            objOut.push(obj);
         }
     });
 }

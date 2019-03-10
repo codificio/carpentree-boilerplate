@@ -139,21 +139,11 @@ class Form extends Component {
         this.setState({ data, errors });
     };
 
-    handleDropdownTreeSelectChange = (name, multiSelect) => (currentNode, selectedNodes) => {
-        let collection = [];
-        if (multiSelect) {
-            //collection = [...this.state[name]];
-            //setValue(collection, currentNode.path + ".checked", currentNode.checked);
-        } else {
-            let obj = {};
-            let nameDefault = name + "Default";
-            collection = [...this.state[nameDefault]];
-            obj = { [name]: collection };
-            this.setState({ obj });
-            setValue(collection, currentNode.path + ".checked", currentNode.checked);
-            obj = { [name]: collection };
-            this.setState({ obj });
-        }
+    handleDropdownTreeSelectChange = name => (currentNode, selectedNodes) => {
+        let nameSelected = name + "Selected";
+        let selectedArray = [];
+        selectedNodes.map(node => selectedArray.push({ id: node.id }));
+        this.setState({ [nameSelected]: selectedArray });
     };
 
     // A parte il label per il resto il login button è interamente riutilizzabile quindi lo metto qui dentro
@@ -199,7 +189,7 @@ class Form extends Component {
         );
     }
 
-    renderDropdownTreeSelect(name, options, multiSelect) {
+    renderDropdownTreeSelect(name, options) {
         const { errors } = this.state;
         const error = errors[name];
         return (
@@ -212,7 +202,7 @@ class Form extends Component {
                     showDropdown={true}
                     placeholderText="creca..."
                     data={options}
-                    onChange={this.handleDropdownTreeSelectChange(name, multiSelect)}
+                    onChange={this.handleDropdownTreeSelectChange(name)}
                     className="mdl-demo"
                 />
                 {error && <div className="alert alert-danger">{error}</div>}

@@ -1,44 +1,106 @@
 import React, { Component } from "react";
 import Form from "../common/form";
+import { locale } from "../../config.json";
 import { ToastContainer, toast } from "react-toastify";
 import { getItems, setItem } from "../../services/collectionServices";
-import { assignObjectPaths } from "../../utils/functions";
+import { assignCategoriesPaths } from "../../utils/functions";
+import FileBrowser, { Icons } from "react-keyed-file-browser";
+import slugify from "react-slugify";
 
 class Categories extends Form {
     state = {
         data: [],
         errors: [],
-        categories: [],
-        categoriesDefault: []
+        files: []
     };
 
     async componentDidMount() {
         const data = await getItems("categories/articles");
+        console.log("data", data);
         let categoriesIn = data.data;
         let categoriesOut = [];
-        assignObjectPaths(categoriesIn, categoriesOut);
-        let categories = [...categoriesOut];
-        let categoriesDefault = [...categoriesOut];
-        this.setState({ categories, categoriesDefault });
+        assignCategoriesPaths(categoriesIn, categoriesOut);
+        let files = [...categoriesOut];
+        this.setState({ files });
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        /* console.log(JSON.stringify(this.state.categories));
-        console.log(JSON.stringify(this.state.categoriesDefault));
-        if (JSON.stringify(this.state.categories) != JSON.stringify(nextState.categories)) {
-            if (JSON.stringify(this.state.categories) == JSON.stringify(this.state.categoriesDefault)) {
-                return false;
-            } else {
-                return false;
+    handleOnActionButtonClick = (item, actionButton) => {
+        console.log(item, actionButton);
+    };
+
+    handleCreateFolder = async key => {
+        console.log(key);
+
+        const nodes = key.split("/");
+        const newElementName = nodes[nodes.length - 2];
+        nodes.pop();
+        nodes.pop();
+        const father = nodes.join("/") + "/";
+        console.log("father", father);
+
+        let newCategory = {};
+        const { files } = this.state;
+        Object.keys(files).forEach(j => {
+            if (files[j].key === father) {
+                newCategory.locale = locale;
+                newCategory.attributes = {};
+                newCategory.attributes.type = "categories";
+                newCategory.attributes.slug = slugify(newElementName);
+                newCategory.attributes.name = newElementName;
+                newCategory.attributes.description = "";
+                newCategory.relationships = {};
+                newCategory.relationships.parent = {};
+                newCategory.relationships.parent.data = {};
+                newCategory.relationships.parent.data.id = files[j].id;
             }
-        } else {
-            return true;
-        }*/
-        return false;
-    }
+        });
+
+        try {
+            await setItem("categories", newCategory);
+        } catch (error) {
+            console.log("error", error);
+        }
+
+        this.setState(state => {
+            state.files = state.files.concat([
+                {
+                    key: key
+                }
+            ]);
+            return state;
+        });
+    };
+
+    handleRenameFolder = (oldKey, newKey) => {
+        const newFiles = [];
+        this.state.files.map(file => {
+            if (file.key.substr(0, oldKey.length) === oldKey) {
+                newFiles.push({
+                    ...file,
+                    key: file.key.replace(oldKey, newKey)
+                });
+            } else {
+                newFiles.push(file);
+            }
+        });
+        this.setState({ files: newFiles });
+    };
+
+    handleDeleteFolder = folderKey => {
+        this.setState(state => {
+            const newFiles = [];
+            state.files.map(file => {
+                if (file.key.substr(0, folderKey.length) !== folderKey) {
+                    newFiles.push(file);
+                }
+            });
+            state.files = newFiles;
+            return state;
+        });
+    };
 
     render() {
-        const { categories, categoriesDefault } = this.state;
+        const { files } = this.state;
 
         return (
             <form onSubmit={this.handleSubmit} className="pb-5">
@@ -49,7 +111,15 @@ class Categories extends Form {
                         <h4 className="mb-4">Gestione categorie</h4>
                     </div>
                     <div className="col-12 px-5 pt-4 ml-0">
-                        <div className="col-12">{this.renderDropdownTreeSelect("categories", categories, false)}</div>
+                        <FileBrowser
+                            files={files}
+                            icons={Icons.FontAwesome(4)}
+                            onCreateFolder={this.handleCreateFolder}
+                            onCreateFiles={this.handleCreateFiles}
+                            onMoveFolder={this.handleRenameFolder}
+                            onRenameFolder={this.handleRenameFolder}
+                            onDeleteFolder={this.handleDeleteFolder}
+                        />
                     </div>
                 </div>
             </form>

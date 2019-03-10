@@ -96,7 +96,7 @@ class NavBar extends Component {
                     </div>
                     <Divider />
                     <div className="p-4">
-                        <NavLink to="/users" style={NavLinkStyle} key="Utenti">
+                        <NavLink to="/users" style={NavLinkStyle} key="Utenti" activeClassName="active">
                             <ListItem button onClick={this.handleClickBlogItem}>
                                 <ListItemIcon className="m-0">
                                     <GroupIco />
@@ -113,7 +113,7 @@ class NavBar extends Component {
                         </ListItem>
                         <Collapse in={blogItemOpen} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
-                                <NavLink to="/articles" style={NavLinkStyle}>
+                                <NavLink to="/articles" style={NavLinkStyle} activeClassName="active">
                                     <ListItem button className={classes.nested}>
                                         <ListItemIcon className="m-0">
                                             <TocIcon />
@@ -121,7 +121,7 @@ class NavBar extends Component {
                                         <ListItemText primary="Articoli" />
                                     </ListItem>
                                 </NavLink>
-                                <NavLink to="/categories" style={NavLinkStyle}>
+                                <NavLink to="/categories" style={NavLinkStyle} activeClassName="active">
                                     <ListItem button className={classes.nested}>
                                         <ListItemIcon className="m-0">
                                             <GrainIcon />

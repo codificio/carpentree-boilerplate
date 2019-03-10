@@ -19,14 +19,7 @@ export async function getItems(collectionName, filters) {
         if (order == "desc") {
             sort = "-" + sort;
         }
-        let url =
-            userEndpoint +
-            "?page=" +
-            currentPage +
-            "&sort=" +
-            sort +
-            "&locale=" +
-            locale;
+        let url = userEndpoint + "?page=" + currentPage + "&sort=" + sort + "&locale=" + locale;
         if (searchQuery) {
             url += "&filter[query]=" + searchQuery;
         }
@@ -41,34 +34,32 @@ export async function getItems(collectionName, filters) {
 
 export async function setItem(path, data) {
     const userEndpoint = apiUrlAdmin + path;
-    if (data.id > 0) {
-        await http.patch(userEndpoint, data, httpHeaders());
-    } else {
-        await http.post(userEndpoint, data, httpHeaders());
+    try {
+        if (data.id > 0) {
+            await http.patch(userEndpoint, data, httpHeaders());
+        } else {
+            await http.post(userEndpoint, data, httpHeaders());
+        }
+    } catch (error) {
+        console.log("setItem error", data);
     }
 }
 
 export async function getItem(path, id) {
     const userEndpoint = apiUrlAdmin + path;
     try {
-        const { data } = await http.get(
-            userEndpoint + "/" + id + "?locale=" + locale,
-            httpHeaders()
-        );
+        const { data } = await http.get(userEndpoint + "/" + id + "?locale=" + locale, httpHeaders());
         //console.log("getItem - data", data);
         return data;
     } catch (error) {
-        console.log("error", error);
+        console.log("getItem error", error);
     }
 }
 
 export async function deleteItem(path, id) {
     const userEndpoint = apiUrlAdmin + path;
     try {
-        const { data } = await http.delete(
-            userEndpoint + "/" + id,
-            httpHeaders()
-        );
+        const { data } = await http.delete(userEndpoint + "/" + id, httpHeaders());
         //  console.log("Data", data);
     } catch (error) {
         console.log("error", error);
