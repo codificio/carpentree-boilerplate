@@ -6,15 +6,9 @@ import config from "../../config.json";
 import { withStyles } from "@material-ui/core/styles";
 import NavBar from "./navBar";
 import Users from "../pages/users";
-import Blog from "../pages/blog";
+import Articles from "../pages/articles";
 import ArticleForm from "../pages/articleForm";
-import Products from "../pages/products";
-import ProductForm from "../pages/productForm";
-import Orders from "../pages/orders";
-import Files from "../pages/files";
-import FilesUpload from "../pages/filesUpload";
-import Gallery from "../pages/gallery";
-import GalleryUpload from "../pages/galleryUpload";
+import Categories from "../pages/categories";
 import LoginForm from "../login/loginForm";
 import RegistrationForm from "../login/registrationForm";
 import RegistrationDone from "../login/registrationDone";
@@ -47,7 +41,7 @@ let styles = theme => ({
     content: {
         flexGrow: 1,
         height: "100%",
-        padding: theme.spacing.unit * 3,
+        padding: theme.spacing.unit * 0,
         marginLeft: drawerWidth
     },
     fullHeight: {
@@ -77,62 +71,20 @@ class ClippedDrawer extends Component {
                 <CssBaseline />
                 {user && <NavBar classes={classes} user={user} />}
 
-                <main
-                    className={classes.content}
-                    style={{ marginLeft: user ? "" : 0 }}
-                >
+                <main className={classes.content} style={{ marginLeft: user ? "" : 0 }}>
                     <Switch className={classes.fullHeight}>
                         <Route path="/login" component={LoginForm} />
                         <Route path="/hello" component={Hello} />
-                        <Route
-                            path="/password/reset"
-                            component={PasswordResetForm}
-                        />
-                        <Route
-                            path="/passwordResetDone"
-                            component={PasswordResetDone}
-                        />
-                        <Route
-                            path="/passwordChange"
-                            component={PasswordChangeForm}
-                        />
-                        <Route
-                            path="/passwordChangeDone"
-                            component={PasswordChangeDone}
-                        />
-                        <Route
-                            path="/registration"
-                            component={RegistrationForm}
-                        />
-                        <Route
-                            path="/registrationDone"
-                            component={RegistrationDone}
-                        />
-                        <ProtectedRoute
-                            path="/galleryUpload"
-                            component={GalleryUpload}
-                        />
-                        <ProtectedRoute path="/gallery" component={Gallery} />
-                        <ProtectedRoute
-                            path="/filesUpload"
-                            component={FilesUpload}
-                        />
-                        <ProtectedRoute path="/files" component={Files} />
-                        <ProtectedRoute path="/orders" component={Orders} />
-                        <ProtectedRoute
-                            path="/products/:id"
-                            component={ProductForm}
-                        />
-                        <ProtectedRoute path="/products" component={Products} />
-                        <ProtectedRoute path="/blog" component={Blog} />
-                        <ProtectedRoute
-                            path="/article/:id"
-                            component={ArticleForm}
-                        />
-                        <ProtectedRoute
-                            path="/users/:id"
-                            component={UserForm}
-                        />
+                        <Route path="/password/reset" component={PasswordResetForm} />
+                        <Route path="/passwordResetDone" component={PasswordResetDone} />
+                        <Route path="/passwordChange" component={PasswordChangeForm} />
+                        <Route path="/passwordChangeDone" component={PasswordChangeDone} />
+                        <Route path="/registration" component={RegistrationForm} />
+                        <Route path="/registrationDone" component={RegistrationDone} />
+                        <ProtectedRoute path="/categories" exact component={Categories} />
+                        <ProtectedRoute path="/articles" exact component={Articles} />
+                        <ProtectedRoute path="/articles/:id" component={ArticleForm} />
+                        <ProtectedRoute path="/users/:id" component={UserForm} />
                         <ProtectedRoute path="/users" component={Users} />
                         <Redirect from="/" to="/hello" />
                     </Switch>

@@ -5,6 +5,9 @@ import Password from "./password";
 import CheckBox from "./checkBox";
 import Select from "./select";
 import SelectMaterial from "@material-ui/core/Select";
+import SelectReact from "react-select";
+import DropdownTreeSelect from "react-dropdown-tree-select";
+import makeAnimated from "react-select/lib/animated";
 import InputMaterial from "@material-ui/core/Input";
 import Datetime from "./datetime";
 import Button from "@material-ui/core/Button";
@@ -20,6 +23,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemText from "@material-ui/core/ListItemText";
+import setValue from "set-value";
 
 const styles = theme => ({
     container: {
@@ -122,6 +126,12 @@ class Form extends Component {
         this.setState({ data, errors });
     };
 
+    handleChangeQuill = name => e => {
+        const data = { ...this.state.data };
+        data[name] = e;
+        this.setState({ data });
+    };
+
     handleSpecialControlsChange = e => {
         const errors = { ...this.state.errors };
         const data = { ...this.state.data };
@@ -129,17 +139,17 @@ class Form extends Component {
         this.setState({ data, errors });
     };
 
+    handleDropdownTreeSelectChange = name => (currentNode, selectedNodes) => {
+        let nameSelected = name + "Selected";
+        let selectedArray = [];
+        selectedNodes.map(node => selectedArray.push({ id: node.id }));
+        this.setState({ [nameSelected]: selectedArray });
+    };
+
     // A parte il label per il resto il login button è interamente riutilizzabile quindi lo metto qui dentro
     renderSubmitButton(label, defaultValidated = false, pull = "", width = "") {
         return (
-            <Button
-                variant="contained"
-                size="medium"
-                color="primary"
-                disabled={this.validate() != null && !defaultValidated}
-                className={pull}
-                onClick={this.doSubmit}
-            >
+            <Button variant="contained" size="medium" color="primary" disabled={this.validate() != null && !defaultValidated} className={pull} onClick={this.doSubmit}>
                 {label}
             </Button>
         );
@@ -147,13 +157,7 @@ class Form extends Component {
 
     renderButton(label, color, size, className = "", handle) {
         return (
-            <Button
-                variant="outlined"
-                size={size}
-                color={color}
-                className={className + " ml-3"}
-                onClick={handle}
-            >
+            <Button variant="outlined" size={size} color={color} className={className + " ml-3"} onClick={handle}>
                 {label}
             </Button>
         );
@@ -161,14 +165,7 @@ class Form extends Component {
 
     renderCancelButton(label, defaultValidated = false, pull = "") {
         return (
-            <Button
-                variant="contained"
-                size="medium"
-                color="default"
-                disabled={this.validate() != null && !defaultValidated}
-                className={pull}
-                onClick={this.handleCancel}
-            >
+            <Button variant="contained" size="medium" color="default" disabled={this.validate() != null && !defaultValidated} className={pull} onClick={this.handleCancel}>
                 {label}
             </Button>
         );
@@ -176,27 +173,50 @@ class Form extends Component {
 
     renderQuill(name, label) {
         const { data, errors } = this.state;
-
+        const error = errors[name];
         return (
             <div className="py-2">
-                <Typography
-                    variant="subheading"
-                    color="textSecondary"
-                    gutterBottom
-                >
+                <Typography variant="subheading" color="textSecondary" gutterBottom>
                     {label}
                 </Typography>
-                <div
-                    className="mt-2 p-4"
-                    style={{ backgroundColor: "#fafafa" }}
-                >
+                <div className="mt-2 p-4" style={{ backgroundColor: "#fafafa" }}>
                     <div className="bg-white">
-                        <ReactQuill
-                            theme="snow"
-                            value={data[name]}
-                            onChange={this.handleChange}
-                        />
+                        <ReactQuill id={name} theme="snow" value={data[name]} onChange={this.handleChangeQuill(name)} />
                     </div>
+                </div>
+                {error && <div className="alert alert-danger">{error}</div>}
+            </div>
+        );
+    }
+
+    renderDropdownTreeSelect(name, options) {
+        const { errors } = this.state;
+        const error = errors[name];
+        return (
+            <div className="py-2">
+                <DropdownTreeSelect
+                    noMatchesText="La ricerca non ha restituito risultati"
+                    keepTreeOnSearch={true}
+                    keepChildrenOnSearch={true}
+                    showPartiallySelected={false}
+                    showDropdown={true}
+                    placeholderText="creca..."
+                    data={options}
+                    onChange={this.handleDropdownTreeSelectChange(name)}
+                    className="mdl-demo"
+                />
+                {error && <div className="alert alert-danger">{error}</div>}
+            </div>
+        );
+    }
+
+    renderAnimatedSelect(name, label, options) {
+        const { data, errors } = this.state;
+        return (
+            <div className="py-2">
+                {label}
+                <div className="mt-2 p-4" style={{ backgroundColor: "#fafafa" }}>
+                    <SelectReact closeMenuOnSelect={false} components={makeAnimated()} value={data[name]} isMulti options={options} onChange={this.handleSpecialControlsChange} />
                 </div>
             </div>
         );
@@ -204,71 +224,40 @@ class Form extends Component {
 
     renderSelectCheckBoxes(name, label, options) {
         const { data, errors } = this.state;
+        const error = errors[name];
         return (
             <div className="py-2">
-                <Typography
-                    variant="subheading"
-                    color="textSecondary"
-                    gutterBottom
-                >
+                <Typography variant="subheading" color="textSecondary" gutterBottom>
                     {label}
                 </Typography>
-                <div
-                    className="mt-2 p-4"
-                    style={{ backgroundColor: "#fafafa" }}
-                >
-                    <Button
-                        variant="outlined"
-                        color="default"
-                        title="edita"
-                        onClick={this.handleSelectCheckBoxesOpenClose}
-                    >
+                <div className="mt-2 p-4" style={{ backgroundColor: "#fafafa" }}>
+                    <Button variant="outlined" color="default" title="edita" onClick={this.handleSelectCheckBoxesOpenClose}>
                         <PlaylistAddCheckIcon />
                     </Button>
-                    <Dialog
-                        disableBackdropClick
-                        disableEscapeKeyDown
-                        open={this.state.selectCheckBoxesOpen}
-                    >
+                    <Dialog disableBackdropClick disableEscapeKeyDown open={this.state.selectCheckBoxesOpen}>
                         <DialogTitle>{label}</DialogTitle>
                         <DialogContent style={{ width: "600px" }}>
                             <form>
                                 <FormControl>
-                                    <InputLabel htmlFor="select-multiple-checkbox">
-                                        {label}
-                                    </InputLabel>
+                                    <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel>
                                     <SelectMaterial
                                         style={{ width: "555px" }}
                                         multiple
                                         value={data[name]}
                                         onChange={this.handleChange}
-                                        input={
-                                            <InputMaterial id="select-multiple-checkbox" />
-                                        }
-                                        renderValue={selected =>
-                                            selected.join(", ")
-                                        }
+                                        input={<InputMaterial id="select-multiple-checkbox" />}
+                                        renderValue={selected => selected.join(", ")}
                                         MenuProps={MenuProps}
                                     >
                                         {options.map(option => (
-                                            <MenuItem
-                                                key={option.id}
-                                                value={option.id}
-                                            >
+                                            <MenuItem key={option.id} value={option.id}>
                                                 <Checkbox
                                                     style={{
-                                                        marginLeft:
-                                                            option.level * 20
+                                                        marginLeft: option.level * 20
                                                     }}
-                                                    checked={
-                                                        data[name].indexOf(
-                                                            option.id
-                                                        ) > -1
-                                                    }
+                                                    checked={data[name].indexOf(option.id) > -1}
                                                 />
-                                                <ListItemText
-                                                    primary={option.name}
-                                                />
+                                                <ListItemText primary={option.name} />
                                             </MenuItem>
                                         ))}
                                     </SelectMaterial>
@@ -276,80 +265,45 @@ class Form extends Component {
                             </form>
                         </DialogContent>
                         <DialogActions>
-                            <Button
-                                onClick={this.handleSelectCheckBoxesOpenClose}
-                                color="primary"
-                            >
+                            <Button onClick={this.handleSelectCheckBoxesOpenClose} color="primary">
                                 Cancel
                             </Button>
-                            <Button
-                                onClick={this.handleSelectCheckBoxesOpenClose}
-                                color="primary"
-                            >
+                            <Button onClick={this.handleSelectCheckBoxesOpenClose} color="primary">
                                 Ok
                             </Button>
                         </DialogActions>
                     </Dialog>
                 </div>
+                {error && <div className="alert alert-danger">{error}</div>}
             </div>
         );
     }
 
     renderSelect(name, label, options, multiple) {
         const { data, errors } = this.state;
-        return (
-            <Select
-                name={name}
-                value={data[name]}
-                label={label}
-                options={options}
-                multiple={multiple === "multiple"}
-                onChange={this.handleSpecialControlsChange}
-                error={errors[name]}
-            />
-        );
+        return <Select name={name} value={data[name]} label={label} options={options} multiple={multiple === "multiple"} onChange={this.handleSpecialControlsChange} error={errors[name]} />;
     }
 
     renderInput(name, label, type, errorDisabled = false) {
         const { data, errors } = this.state;
 
-        return (
-            <Input
-                type={type}
-                name={name}
-                value={data[name]}
-                label={label}
-                onChange={this.handleChange}
-                error={errors[name]}
-                errorDisabled={errorDisabled}
-            />
-        );
+        return <Input type={type} name={name} value={data[name]} label={label} onChange={this.handleChange} error={errors[name]} errorDisabled={errorDisabled} />;
+    }
+
+    renderInputDisabled(name, label, value, type) {
+        return <Input type={type} name={name} value={value} label={label} onChange={this.handleChange} />;
     }
 
     renderPassword(name, label) {
         const { data, errors } = this.state;
 
-        return (
-            <Password
-                type="password"
-                name={name}
-                value={data[name]}
-                label={label}
-                onChange={this.handleChange}
-                error={errors[name]}
-            />
-        );
+        return <Password type="password" name={name} value={data[name]} label={label} onChange={this.handleChange} error={errors[name]} />;
     }
 
     renderCheckBox(name, label) {
         const { data, errors } = this.state;
         return (
-            <CheckBox
-                name={name}
-                label={label}
-                onChange={this.handleCheckBoxChange}
-                error={errors[name]}
-            >
+            <CheckBox name={name} label={label} onChange={this.handleCheckBoxChange} error={errors[name]}>
                 {label}
             </CheckBox>
         );
@@ -357,14 +311,7 @@ class Form extends Component {
 
     renderDateTime(name, label, type, errorDisabled) {
         const { data, errors } = this.state;
-        return (
-            <Datetime
-                id={name}
-                name={name}
-                label={label}
-                onChange={this.handleSpecialControlsChange}
-            />
-        );
+        return <Datetime id={name} name={name} label={label} onChange={this.handleSpecialControlsChange} />;
     }
 }
 

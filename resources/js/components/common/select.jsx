@@ -38,37 +38,40 @@ const Select = ({
     };
 
     return (
-        <FormControl className={classes.formControl}>
-            <InputLabel htmlFor={name}>{label}</InputLabel>
-            {multiple === true ? (
-                <SelectMaterial
-                    value={value}
-                    onChange={handleChange}
-                    inputProps={inputProps}
-                    multiple
-                    {...rest}
-                >
-                    {options.map(option => (
-                        <MenuItem key={option.id} value={option.id}>
-                            {option.attributes.name}
-                        </MenuItem>
-                    ))}
-                </SelectMaterial>
-            ) : (
-                <SelectMaterial
-                    value={value}
-                    onChange={handleChange}
-                    inputProps={inputProps}
-                    {...rest}
-                >
-                    {options.map(option => (
-                        <MenuItem key={option.id} value={option.id}>
-                            {option.name}
-                        </MenuItem>
-                    ))}
-                </SelectMaterial>
-            )}
-        </FormControl>
+        <div>
+            <FormControl className={classes.formControl}>
+                <InputLabel htmlFor={name}>{label}</InputLabel>
+                {multiple === true ? (
+                    <SelectMaterial
+                        value={value}
+                        onChange={handleChange}
+                        inputProps={inputProps}
+                        multiple
+                        {...rest}
+                    >
+                        {options.map(option => (
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.attributes.name}
+                            </MenuItem>
+                        ))}
+                    </SelectMaterial>
+                ) : (
+                    <SelectMaterial
+                        value={value}
+                        onChange={handleChange}
+                        inputProps={inputProps}
+                        {...rest}
+                    >
+                        {options.map(option => (
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.name}
+                            </MenuItem>
+                        ))}
+                    </SelectMaterial>
+                )}
+            </FormControl>
+            {error && <div className="alert alert-danger">{error}</div>}
+        </div>
     );
 };
 
