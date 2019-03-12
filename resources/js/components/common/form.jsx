@@ -4,6 +4,7 @@ import Input from "./input";
 import Password from "./password";
 import CheckBox from "./checkBox";
 import Select from "./select";
+import MediaUploader from "./mediaUploader";
 import SelectMaterial from "@material-ui/core/Select";
 import SelectReact from "react-select";
 import DropdownTreeSelect from "react-dropdown-tree-select";
@@ -312,6 +313,10 @@ class Form extends Component {
     renderDateTime(name, label, type, errorDisabled) {
         const { data, errors } = this.state;
         return <Datetime id={name} name={name} label={label} onChange={this.handleSpecialControlsChange} />;
+    }
+
+    renderMediaUploader(filesAccepted) {
+        <MediaUploader filesAccepted={filesAccepted} dropzoneClass="dropzone" onUpload={this.handleMediaUploaded} />;
     }
 }
 

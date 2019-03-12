@@ -24,7 +24,6 @@ export async function getItems(collectionName, filters) {
             url += "&filter[query]=" + searchQuery;
         }
     }
-
     const { data } = await http.get(url, httpHeaders());
     if (filters) {
         data.sortColumn = filters.sortColumn;

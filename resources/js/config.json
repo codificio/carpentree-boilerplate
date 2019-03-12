@@ -12,8 +12,10 @@
     "fakeToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImI4NjQ5MTViLWMzZGUtNGQxMC1iNmYyLTVlYjVkYmVhN2VlNCIsImlhdCI6MTU0NzI0MDEwNywiZXhwIjoxNTQ3MjQzNzA3fQ._bDsexo2fM4_1S1-av6FaiiYIbRL2B8T1DTpYcVkXJo",
 
     "apiUrlSkeinet": "https://www.skeinet.com/carpentree/api.php",
-    "apiUrl": "http://localhost",
     "noImageUrl": "https://www.skeinet.com/carpentree/images/products/noImage.jpg",
+
+    "apiUrl": "http://localhost",
+    "urlMedia": "http://localhost/admin/media",
 
     "grant_type": "password",
     "client_id": "4",

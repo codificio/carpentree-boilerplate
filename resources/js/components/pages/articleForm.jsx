@@ -115,6 +115,10 @@ class ArticleForm extends Form {
         // window.location = "/categories";
     };
 
+    handleMediaUploaded = () => {
+        console.log("Uploaded");
+    };
+
     doSubmit = async () => {
         const errors = this.validate();
         this.setState({ errors: errors || {} });
@@ -191,6 +195,7 @@ class ArticleForm extends Form {
                                     </div>
                                     <div className="col-12">{this.renderQuill("body", "Testo")}</div>
                                     <div className="col-12">{this.renderQuill("excerpt", "Estratto del testo")}</div>
+                                    <div className="col-12">{this.renderMediaUploader("")}</div>
                                 </div>
                             </div>
                             <div className="col-xs-12 col-lg-6 px-5 borderLeftThiny">
