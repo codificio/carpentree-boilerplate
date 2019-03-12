@@ -17,7 +17,8 @@ const emptyArticle = {
     title: "",
     body: "",
     excerpt: "",
-    status: ""
+    status: "",
+    id: 0
 };
 
 class ArticleForm extends Form {
@@ -68,7 +69,7 @@ class ArticleForm extends Form {
             //data.locale = dbItem.data.locale;
             //data.lucky_number = getMetaValue(dbItem.data, "lucky_number");
 
-            console.log("Article # " + this.props.match.params.id, article);
+            //console.log("Article # " + this.props.match.params.id, article);
 
             this.setState({
                 data: article,
@@ -180,27 +181,19 @@ class ArticleForm extends Form {
                 <div className="col-12 px-5 pt-4 ml-3">
                     <ToastContainer />
                     <h6 className="mt-4 mb-1 text-secondary">home / blog</h6>
-                    {loading && <h4 className="mb-4">Articolo</h4>}
-                    {!loading && <h4 className="mb-4">{data.id == 0 ? "Nuovo articolo" : "Modifica articolo # " + data.id}</h4>}
+                    {loading && <h4 className="mb-4">Caricamento...</h4>}
+                    {!loading && <h4 className="mb-4">{data.id === 0 ? "Nuovo articolo" : "Modifica articolo # " + data.id}</h4>}
                 </div>
                 {loading && <SpinnerLoading />}
                 {!loading && (
-                    <form onSubmit={this.handleSubmit} className="pb-5">
-                        <div className="row">
-                            <div className="col-xs-12 col-lg-6 px-5">
+                    <div className="row">
+                        <div className="col-xs-12 col-lg-6 px-5">
+                            <form onSubmit={this.handleSubmit} className="pb-5">
                                 <div className="row m-0">
                                     <div className="col-12">{this.renderInput("title", "Titolo")}</div>
                                     <div className="col-12">
                                         <Input type="text" value={slugify(data.title)} label="Slug" />
                                     </div>
-                                    <div className="col-12">{this.renderQuill("body", "Testo")}</div>
-                                    <div className="col-12">{this.renderQuill("excerpt", "Estratto del testo")}</div>
-                                    <div className="col-12">{this.renderMediaUploader("")}</div>
-                                </div>
-                            </div>
-                            <div className="col-xs-12 col-lg-6 px-5 borderLeftThiny">
-                                <div className="row m-0">
-                                    <div className="col-12">{this.renderSelect("status", "Stato", statuses, "single")}</div>
                                     <div className="col-12 ">
                                         <Typography className="mt-2" variant="subheading" color="textSecondary" gutterBottom>
                                             <span className="c-pointer float-right">
@@ -208,13 +201,21 @@ class ArticleForm extends Form {
                                                 <AddBoxIcon onClick={this.handleCreateNewCategory} />
                                             </span>
                                         </Typography>
-                                        {this.renderDropdownTreeSelect("categories", categories)}
+                                        {this.renderDropdownTreeSelect("categories", "Categorie", categories)}
                                     </div>
+                                    <div className="col-12">{this.renderQuill("body", "Testo")}</div>
+                                    <div className="col-12">{this.renderQuill("excerpt", "Estratto del testo")}</div>
+                                    <div className="col-12">{this.renderSelect("status", "Stato", statuses, "single")}</div>
                                 </div>
-                            </div>
-                            <div className="col-xs-12 col-lg-12 pt-5 c">{this.renderSubmitButton("Salva modifiche alla'rticolo", true, "")}</div>
+                            </form>
                         </div>
-                    </form>
+                        <div className="col-xs-12 col-lg-6 px-5 borderLeftThiny">
+                            <div className="row m-0">
+                                <div className="col-12">{this.renderMediaUploader("")}</div>
+                            </div>
+                        </div>
+                        <div className="col-xs-12 col-lg-12 pt-5 c">{this.renderSubmitButton("Salva modifiche alla'rticolo", true, "")}</div>
+                    </div>
                 )}
             </div>
         );

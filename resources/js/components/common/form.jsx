@@ -190,23 +190,28 @@ class Form extends Component {
         );
     }
 
-    renderDropdownTreeSelect(name, options) {
+    renderDropdownTreeSelect(name, label, options) {
         const { errors } = this.state;
         const error = errors[name];
         return (
             <div className="py-2">
-                <DropdownTreeSelect
-                    noMatchesText="La ricerca non ha restituito risultati"
-                    keepTreeOnSearch={true}
-                    keepChildrenOnSearch={true}
-                    showPartiallySelected={false}
-                    showDropdown={true}
-                    placeholderText="creca..."
-                    data={options}
-                    onChange={this.handleDropdownTreeSelectChange(name)}
-                    className="mdl-demo"
-                />
-                {error && <div className="alert alert-danger">{error}</div>}
+                <Typography variant="subheading" color="textSecondary" gutterBottom>
+                    {label}
+                </Typography>
+                <div className="mt-3 p-4" style={{ backgroundColor: "#fafafa" }}>
+                    <DropdownTreeSelect
+                        noMatchesText="La ricerca non ha restituito risultati"
+                        keepTreeOnSearch={true}
+                        keepChildrenOnSearch={true}
+                        showPartiallySelected={false}
+                        showDropdown={false}
+                        placeholderText="cerca..."
+                        data={options}
+                        onChange={this.handleDropdownTreeSelectChange(name)}
+                        className="mdl-demo"
+                    />
+                    {error && <div className="alert alert-danger">{error}</div>}
+                </div>
             </div>
         );
     }
@@ -316,7 +321,16 @@ class Form extends Component {
     }
 
     renderMediaUploader(filesAccepted) {
-        <MediaUploader filesAccepted={filesAccepted} dropzoneClass="dropzone" onUpload={this.handleMediaUploaded} />;
+        return (
+            <div className="py-2">
+                <Typography variant="subheading" color="textSecondary" gutterBottom>
+                    Media
+                </Typography>
+                <div className="mt-3 px-4" style={{ backgroundColor: "#fafafa" }}>
+                    <MediaUploader filesAccepted={filesAccepted} dropzoneClass="dropzone" onUpload={this.handleMediaUploaded} />
+                </div>
+            </div>
+        );
     }
 }
 

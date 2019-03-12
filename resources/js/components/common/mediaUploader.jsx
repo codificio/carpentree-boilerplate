@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from "react";
 import Http from "../../services/httpService";
 import { getProgressCompleted } from "../../utils/functions";
-import urlMedia from "../../config.json";
+import { urlMedia } from "../../config.json";
 import Table from "./table";
 import Form from "./form";
 import Dropzone from "./dropzone";
 import Joi from "joi-browser";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { httpHeaders } from "../../utils/functions";
 
 class MediaUploader extends Component {
     state = {
@@ -52,7 +53,6 @@ class MediaUploader extends Component {
             file.size = item.size;
             filesToShow.push(file);
         });
-
         this.setState({ files: acceptedFiles });
         this.setState({ filesToShow });
     };
@@ -60,14 +60,21 @@ class MediaUploader extends Component {
     handleUploadFiles = async () => {
         const fd = new FormData();
         const files = [...this.state.files];
-        files.map(file => {
-            fd.append(file.name, file, file.name);
-        });
-        await Http.post(urlMedia, fd, {
+        /* files.map(file => {
+            
+        });*/
+        fd.append("media", files);
+
+        console.log("urlMedia", urlMedia);
+        console.log("fd", fd);
+        console.log("files", files);
+        await Http.post(urlMedia, fd, httpHeaders(), {
             onUploadProgress: progressEvent => {
                 this.setState({ progressLoaded: progressEvent.loaded });
                 this.setState({ progressTotal: progressEvent.total });
             }
+        }).then(function(response) {
+            console.log(response);
         });
         this.props.onUpload();
     };
@@ -79,7 +86,6 @@ class MediaUploader extends Component {
         return (
             <div className="row">
                 <div className="col-12">
-                    <h1 className="text-secondary">Caricamento file</h1>
                     <Dropzone
                         filesAccepted={filesAccepted}
                         dropzoneClass={dropzoneClass}

@@ -15,7 +15,7 @@
     "noImageUrl": "https://www.skeinet.com/carpentree/images/products/noImage.jpg",
 
     "apiUrl": "http://localhost",
-    "urlMedia": "http://localhost/admin/media",
+    "urlMedia": "http://localhost/api/admin/media",
 
     "grant_type": "password",
     "client_id": "4",
