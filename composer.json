@@ -15,7 +15,7 @@
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1",
         "codificio/carpentree-core": "~0.3",
-        "codificio/carpentree-blog": "~0.3"
+        "codificio/carpentree-blog": "~0.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
