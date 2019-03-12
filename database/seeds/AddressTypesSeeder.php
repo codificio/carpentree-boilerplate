@@ -14,23 +14,27 @@ class AddressTypesSeeder extends Seeder
     public function run()
     {
         $dataHome = [
-            'en' => ['name' => 'Home'],
-            'it' => ['name' => 'Casa']
+            'name' => 'home',
+            'en' => ['label' => 'Home'],
+            'it' => ['label' => 'Casa']
         ];
 
         $dataBusiness = [
-            'en' => ['name' => 'Business'],
-            'it' => ['name' => 'Business']
+            'name' => 'business',
+            'en' => ['label' => 'Business'],
+            'it' => ['label' => 'Business']
         ];
 
         $dataBilling = [
-            'en' => ['name' => 'Billing'],
-            'it' => ['name' => 'Fatturazione']
+            'name' => 'billing',
+            'en' => ['label' => 'Billing'],
+            'it' => ['label' => 'Fatturazione']
         ];
 
         $dataShipping = [
-            'en' => ['name' => 'Shipping'],
-            'it' => ['name' => 'Spedizione']
+            'name' => 'shipping',
+            'en' => ['label' => 'Shipping'],
+            'it' => ['label' => 'Spedizione']
         ];
 
         Type::create($dataHome);
