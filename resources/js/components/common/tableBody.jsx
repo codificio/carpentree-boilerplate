@@ -7,7 +7,7 @@ class TableBody extends Component {
     componentDidMount = () => {};
 
     renderCell = (item, column) => {
-        const tmpItem = { ...item };
+        const tmpItem = { ...item.attributes };
         switch (column.format) {
             case "text":
                 break;

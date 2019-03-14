@@ -10,6 +10,7 @@ import Articles from "../pages/articles";
 import ArticleForm from "../pages/articleForm";
 import Categories from "../pages/categories";
 import LoginForm from "../login/loginForm";
+import AddressForm from "../common/addressForm";
 import RegistrationForm from "../login/registrationForm";
 import RegistrationDone from "../login/registrationDone";
 import PasswordResetForm from "../login/passwordResetForm";
@@ -84,6 +85,7 @@ class ClippedDrawer extends Component {
                         <ProtectedRoute path="/categories" exact component={Categories} />
                         <ProtectedRoute path="/articles" exact component={Articles} />
                         <ProtectedRoute path="/articles/:id" component={ArticleForm} />
+                        <ProtectedRoute path="/addresses/:id" component={AddressForm} />
                         <ProtectedRoute path="/users/:id" component={UserForm} />
                         <ProtectedRoute path="/users" component={Users} />
                         <Redirect from="/" to="/hello" />

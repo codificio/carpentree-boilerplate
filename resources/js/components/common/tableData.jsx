@@ -53,6 +53,20 @@ class TableData extends Component {
         const filters = { ...collection, data: [], searchQuery };
         try {
             const collectionFiltered = await getItems(collectionName, filters);
+
+            /* let collectionForTableData = {};
+            collectionForTableData.data = [];
+            for (let i = 0; i < collectionFiltered.data.length; i++) {
+                const collectionItem = collectionFiltered.data[i];
+                let tableDataItem = {};
+                tableDataItem = { ...collectionItem.attributes };
+                tableDataItem.id = collectionItem.id;
+                tableDataItem.locale = collectionItem.locale;
+                collectionForTableData.data.push(tableDataItem);
+            }
+            console.log("collectionForTableData", collectionForTableData);
+            console.log("collectionFiltered", collectionFiltered);*/
+
             this.setState({
                 collection: collectionFiltered,
                 pageLoading: false
@@ -81,9 +95,7 @@ class TableData extends Component {
         const { collection, msgYesNoData } = this.state;
         const item = msgYesNoData.item;
         const collectionUpdated = { ...collection };
-        collectionUpdated.data = collectionUpdated.data.filter(
-            i => i.id !== item.id
-        );
+        collectionUpdated.data = collectionUpdated.data.filter(i => i.id !== item.id);
         this.setState({ collection: collectionUpdated });
         this.setState({ msgYesNoData: { open: false } });
         await deleteItem(path, item.id);
@@ -94,9 +106,7 @@ class TableData extends Component {
     };
 
     handleEdit = editedRecord => {
-        this.props.history.push(
-            "/" + this.props.collectionName + "/" + editedRecord.id
-        );
+        this.props.history.push("/" + this.props.collectionName + "/" + editedRecord.id);
     };
 
     handlePageChange = async currentPage => {
@@ -127,11 +137,7 @@ class TableData extends Component {
 
     render() {
         const { collection, pageTitle, itemLabel, pageLoading } = this.state;
-        const {
-            total: totalItems,
-            per_page: pageSize,
-            current_page: currentPage
-        } = collection.meta;
+        const { total: totalItems, per_page: pageSize, current_page: currentPage } = collection.meta;
         const { sortColumn } = collection;
         const { popperShows, searchQuery } = this.state;
         const { title, text, open } = this.state.msgYesNoData;
@@ -139,32 +145,19 @@ class TableData extends Component {
         return (
             <div>
                 <ToastContainer />
-                <MsgYesNo
-                    title={title}
-                    text={text}
-                    open={open}
-                    onMsgYesNoClickYes={this.handleMsgYesNoClickYes}
-                    onMsgYesNoClickNo={this.handleMsgYesNoClickNo}
-                />
+                <MsgYesNo title={title} text={text} open={open} onMsgYesNoClickYes={this.handleMsgYesNoClickYes} onMsgYesNoClickNo={this.handleMsgYesNoClickNo} />
                 <div className="col-12 pt-3">
                     <h2 className="text-secondary c">{pageTitle}</h2>
                 </div>
                 <div className="row bg-white px-3 py-3">
                     {!pageLoading && (
                         <div className="col-4">
-                            <SearchBox
-                                value={searchQuery}
-                                onChange={this.handleSearch}
-                            />
+                            <SearchBox value={searchQuery} onChange={this.handleSearch} />
                         </div>
                     )}
                     {!pageLoading && (
                         <div className="col-8">
-                            <Typography
-                                variant="body1"
-                                gutterBottom
-                                align="right"
-                            >
+                            <Typography variant="body1" gutterBottom align="right">
                                 {totalItems} record visualizzati.
                             </Typography>
                         </div>
@@ -172,14 +165,8 @@ class TableData extends Component {
                     {pageLoading && <SpinnerLoading />}
                     {collection.data.length === 0 && !pageLoading && (
                         <div className="col-12 c my-4 text-danger">
-                            {searchQuery === "" ? (
-                                <Cloud className="mr-2" />
-                            ) : (
-                                <SearchIcon className="mr-2" />
-                            )}
-                            {searchQuery === ""
-                                ? "Nessun record nel database..."
-                                : "Il filtro di ricerca impostato non ha restituito risultati..."}
+                            {searchQuery === "" ? <Cloud className="mr-2" /> : <SearchIcon className="mr-2" />}
+                            {searchQuery === "" ? "Nessun record nel database..." : "Il filtro di ricerca impostato non ha restituito risultati..."}
                         </div>
                     )}
                     {collection.data.length > 0 && (
@@ -194,24 +181,14 @@ class TableData extends Component {
                                 onSort={this.handleSort}
                                 columns={this.state.columns}
                             />
-                            {totalItems && (
-                                <Pagination
-                                    itemsCount={totalItems}
-                                    pageSize={pageSize}
-                                    currentPage={currentPage}
-                                    onPageChange={this.handlePageChange}
-                                />
-                            )}
+                            {totalItems && <Pagination itemsCount={totalItems} pageSize={pageSize} currentPage={currentPage} onPageChange={this.handlePageChange} />}
                         </div>
                     )}
                 </div>
                 {!pageLoading && (
                     <div className="col-12 c">
                         <hr />
-                        <button
-                            className="btn btn-secondary"
-                            onClick={this.handleNew}
-                        >
+                        <button className="btn btn-secondary" onClick={this.handleNew}>
                             {"Nuovo " + itemLabel}
                         </button>
                         <hr />

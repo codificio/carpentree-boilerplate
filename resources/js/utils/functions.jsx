@@ -3,6 +3,31 @@ import setValue from "set-value";
 import { SSL_OP_NETSCAPE_CHALLENGE_BUG } from "constants";
 Moment.locale("it");
 
+export function transformDataReactToLaravel(data) {
+    let dataLaravel = {};
+    dataLaravel.id = data.id;
+    dataLaravel.locale = data.locale;
+
+    // Attributes
+    dataLaravel.attributes = { ...data };
+
+    // Relationships
+    dataLaravel.relationships = {};
+
+    // Meta
+    dataLaravel.relationships.meta = {};
+    dataLaravel.relationships.meta.data = [];
+
+    /*
+        Esempio meta data
+        dataToSend.relationships.meta.data.push({
+        attributes: { key: "lucky_number", value: data.lucky_number }
+        });
+        */
+
+    return dataLaravel;
+}
+
 export function bytesToSize(bytes) {
     var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
     if (bytes == 0) return "0 Byte";

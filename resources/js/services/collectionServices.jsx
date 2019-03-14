@@ -1,6 +1,7 @@
 import http from "./httpService";
 import { apiUrl, locale } from "../config.json";
 import { httpHeaders } from "../utils/functions";
+import { toast } from "react-toastify";
 
 const apiUrlAdmin = apiUrl + "/api/admin/";
 
@@ -24,11 +25,20 @@ export async function getItems(collectionName, filters) {
             url += "&filter[query]=" + searchQuery;
         }
     }
-    const { data } = await http.get(url, httpHeaders());
-    if (filters) {
-        data.sortColumn = filters.sortColumn;
+    try {
+        const { data } = await http.get(url, httpHeaders());
+        let dataToReturn = { ...data };
+        if (typeof dataToReturn === "undefined" || typeof dataToReturn.data === "undefined") {
+            throw new Exception();
+        }
+        if (filters) {
+            dataToReturn.sortColumn = filters.sortColumn;
+        }
+        return dataToReturn;
+    } catch (error) {
+        toast.error("Errore nel recuperare la lista [" + collectionName + "]. Ricaricare la pagina o contattare l'assistenza", { position: toast.POSITION.BOTTOM_CENTER });
+        return { data: [] };
     }
-    return data;
 }
 
 export async function setItem(path, data) {
@@ -39,8 +49,10 @@ export async function setItem(path, data) {
         } else {
             await http.post(userEndpoint, data, httpHeaders());
         }
+        return true;
     } catch (error) {
-        console.log("setItem error", data);
+        console.log("error setItem", error);
+        return false;
     }
 }
 
