@@ -60,6 +60,7 @@
         "react-spinner-material": "^1.0.19",
         "react-spinners": "^0.5.1",
         "react-transition-group": "^2.6.0",
+        "save": "^2.3.3",
         "set-value": "^3.0.0"
     }
 }
