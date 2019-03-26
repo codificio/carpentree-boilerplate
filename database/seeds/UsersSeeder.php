@@ -14,7 +14,7 @@ class UsersSeeder extends Seeder
         $superadmin = new \Carpentree\Core\Models\User([
             'first_name' => 'Mega',
             'last_name' => 'Direttore',
-            'email' => 'megadirettore@carpentree.com',
+            'email' => 'admin@carpentree.com',
             'password' => \Illuminate\Support\Facades\Hash::make('fakepassword01')
         ]);
 
