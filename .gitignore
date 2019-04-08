@@ -14,3 +14,9 @@ yarn-error.log
 /.vagrant
 packages/
 /laradock
+
+# Public build
+/public/js
+/public/css
+/public/build
+/public/mix-manifest.json
