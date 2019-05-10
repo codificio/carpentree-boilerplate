@@ -37,7 +37,7 @@ $ npm install
 Accedere alla bash del container come spiegato [qui](#markdown-header-accesso-alla-bash).
 
 ``` bash
-$ composer install
+$ composer update
 ```
 
 ### Inizializzazione Laravel
