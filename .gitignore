@@ -13,7 +13,6 @@ yarn-error.log
 /.vscode
 /.vagrant
 packages/
-/laradock
 
 # Public build
 /public/js
